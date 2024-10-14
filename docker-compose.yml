@@ -1,0 +1,28 @@
+# docker-compose.yml - Only for local debug purposes
+# docker-compose up -d elasticsearch kibana jaeger camunda redis mongo mysql postgres pgadmin
+version: '3.9'
+
+services:
+  dynamodb:
+    image: amazon/dynamodb-local:latest
+    container_name: local-dynamodb
+    restart: always
+    ports: 
+      - "8000:8000"
+    environment:
+      AWS_ACCESS_KEY_ID: local
+      AWS_SECRET_ACCESS_KEY: local
+      AWS_REGION: us-east-1
+
+  dynamodb-admin:
+    image: aaronshaf/dynamodb-admin
+    container_name: local-dynamodb-admin
+    restart: always
+    ports: 
+      - "8001:8001"
+    environment:
+      DYNAMO_ENDPOINT: "http://dynamodb:8000/"
+      AWS_ACCESS_KEY_ID: local
+      AWS_SECRET_ACCESS_KEY: local
+      AWS_REGION: us-east-1
+      depends_on: dynamodb
